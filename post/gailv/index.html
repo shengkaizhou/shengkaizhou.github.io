@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-us" lang="en-us">
+<head>
+  <link href="https://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="generator" content="Hugo 0.59.1" />
+
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>协方差(covariance)和相关系数(correlation coefficient) &middot; 周 圣 凯·BLOG</title>
+  <meta name="description" content="" />
+
+  
+  <link type="text/css" rel="stylesheet" href="https://shengkaizhou.github.io/css/print.css" media="print">
+  <link type="text/css" rel="stylesheet" href="https://shengkaizhou.github.io/css/poole.css">
+  <link type="text/css" rel="stylesheet" href="https://shengkaizhou.github.io/css/syntax.css">
+  <link type="text/css" rel="stylesheet" href="https://shengkaizhou.github.io/css/hyde.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Abril+Fatface|PT+Sans:400,400i,700">
+
+
+  
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/apple-touch-icon-144-precomposed.png">
+  <link rel="shortcut icon" href="/favicon.png">
+
+  
+  
+</head>
+
+  <body class=" ">
+  <aside class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      <a href="https://shengkaizhou.github.io/"><h1>周 圣 凯·BLOG</h1></a>
+      <p class="lead">
+      中北大学软件学院硕士在读，方向为移动云计算与大数据技术及应用
+      </p>
+    </div>
+
+    <nav>
+      <ul class="sidebar-nav">
+        <li><a href="https://shengkaizhou.github.io/">主界面</a> </li>
+        
+      </ul>
+    </nav>
+
+    <p></p>
+  </div>
+</aside>
+
+    <main class="content container">
+    <div class="post">
+  <h1>协方差(covariance)和相关系数(correlation coefficient)</h1>
+  <time datetime=2019-11-07T19:52:12&#43;0800 class="post-date">Thu, Nov 7, 2019</time>
+  <p>#原文地址链接：<a href="https://blog.csdn.net/Tonywu2018/article/details/83902570?utm_source=wechat_session&amp;utm_medium=social&amp;utm_oi=641363510886666240">https://blog.csdn.net/Tonywu2018/article/details/83902570?utm_source=wechat_session&amp;utm_medium=social&amp;utm_oi=641363510886666240</a></p>
+
+<p>相关系数和协方差实际上是相同的概念，都是用来描述两个随机变量之间的相似程度的。这篇文章将详细说明协方差和相关系数的相关知识。</p>
+
+<p>首先声明，此篇的内容是来自&rdquo;马同学高等数学&rdquo;微信公众号的内容。</p>
+
+<p>#1、事物之间的关系</p>
+
+<p>事物之间有两种关系，有关系和没关系。</p>
+
+<p>##1.1 、有关系</p>
+
+<p>据专家表示，要买房的人越多（下图的城镇化率可以简单理解为进城买房的人数），房价就越高（数据来源）：</p>
+
+<p>从上图可以看出，房价与进城买房的人数成正比，两者的关系是正相关。</p>
+
+<p>城镇化除了推升城市房价之外，还有另外一个作用，降低出生率。城镇化和出生率之间的关系就是负相关：</p>
+
+<p>所以说，“城镇化是最好的避孕药”，不管在新加坡、日本、中国、美国都有这样的规律。城镇化一方面是推动买房人口的增加，一方面是出生人口的减少，那么未来房价会怎样？预测未来就是统计学家的重要工作。</p>
+
+<p>##1.2、没关系</p>
+
+<p>比如说买彩票，跟是否求神拜佛，是否洗手这些事没有关系的。</p>
+
+<p>协方差、相关系数就是尝试找出两个随机变量之间具有什么样的关系。</p>
+
+<p>#2、距离与关系</p>
+
+<p>在线性代数里面是用距离来描述关系的。比如，几米的漫画《向左走，向右走》，讲述了一对都市男女，比邻而居：</p>
+
+<p>却总是擦肩而过：</p>
+
+<p>用句文艺的话来说就是，“距离那么近，相隔那么远”。</p>
+
+<p>这里面就包含了两个数学中的距离：</p>
+
+<p>“距离那么近”：欧式距离，也就是两点之间的直线距离</p>
+
+<p>“相隔那么远”：余弦距离，也就是本文想说的，表示关系用的距离</p>
+
+<p>##2.1 欧式距离</p>
+
+<p>欧式距离是我们接触最多的距离，实际上他就是直线距离。比如，向量a和向量b之间的欧式距离就是下图中的许下：</p>
+
+<p>欧式距离可以通过勾股定理，或者点积来计算：</p>
+
+<p>##2.2 余弦距离</p>
+
+<p>比如，向量向量a和向量b的余弦距离就是下图中θ角的余弦
+<img src="img/1911071.png" alt="image" /></p>
+
+<p>根据线性代数的知识，余弦也可以通过点积和模长来计算：
+<img src="img/1911072.png" alt="image" /></p>
+
+<p>##2.3 通过余弦距离来计算关系</p>
+
+<p>举一个在实际应用中，通过余弦距离来计算关系的例子。下面是某书评网站，用户对一些书籍进行了相应的评分：</p>
+
+<p>第一个用户的信息用向量\vec v =(4,3,0,0,5,0)来表示，第二个用户的信息用向量\vec v =(5,0,4,0,4,0)来表示，那么他们之间的相似性可以用余弦距离来表示：</p>
+
+<p>带入数据，结果保留到小数点后两位：</p>
+
+<p>余弦最大即为1，所以两者之间应该是挺有关系的，我们可以考虑把第一个用户喜欢的书推荐给第二个用户，或者反之。以此类推，我们就可以做出如下表格，表明各个用户的相关性：</p>
+
+<p>但是这有一个问题，比如第一个用户喜好假如是：\vec{v} = (1,1,1,1,1,1),也就是说他对所有书籍的评分都是1.</p>
+
+<p>第二个用户的喜好是：\vec{v} = (5,5,5,5,5,5)，也就是说他对所有书籍的评分都是5。这两个人的喜好不是很相同，但是：</p>
+
+<p>余弦距离表明两个人的喜好是完全相同的。</p>
+
+<p>我们来改进一下：</p>
+
+<p>5分，表示很喜欢，实际值为2</p>
+
+<p>4分，表示喜欢，实际值为1</p>
+
+<p>3分，表示中性态度，实际值为0</p>
+
+<p>2分，表示讨厌，实际值为-1</p>
+
+<p>1分，表示很讨厌，实际值为-2</p>
+
+<p>不打分，默认实际值为0</p>
+
+<p>因此，第一个用户喜好的实际值为：</p>
+
+<p>同样的，第二个用户的喜好的实际值为：</p>
+
+<p>余弦距离的结果为：</p>
+
+<p>-1表示两人的喜好是相反的。-1，也就是相反的喜好不代表不相关，而是负相关。我们可以这么来看，比如我们知道第一个用户和第二个用户的余弦距离为-1，那么第一个用户喜欢的就不要推荐给第二个用户，第一个用户讨厌的可以推荐给第二个用户，所以实际两人是相关的，而且还非常相关。</p>
+
+<p>#3、协方差和相关系数</p>
+
+<p>扯了这么多有的没的，我们该回到正题了。先假设有两个随机量 X,Y ，其均值分别为 \bar{X},\bar{Y} 。</p>
+
+<p>由这两个随机量及其均值组成两个向量（可以这么认为，对于随机变量组成的向量，其均值才是原点）：              好，准备好了，我们往下走。</p>
+
+<p>##3.1 、样本方差</p>
+
+<p>对于 X ，其样本方差为：</p>
+
+<p>通过向量表示为：                        方差看起来很像是欧式距离。</p>
+
+<p>##3.2 、样本协方差</p>
+
+<p>对于X,Y，其样本协方差为：</p>
+
+<p>通过向量表示为：                           协方差看起来很像点积。</p>
+
+<p>其实协方差已经可以表示两个向量之间的关系了，但是会受到向量长度的影响，比如：</p>
+
+<p>虽然两个向量的夹角相等，但是算出来的协方差，除了符号相同外，数值却相差较大，为了解决这个问题，我们把协方差归一化，也就是相关系数。</p>
+
+<p>##3.3、样本相关系数</p>
+
+<p>对于 X,Y ，样本相关系数为：                       其中S<em>{X},S</em>{Y}  为标准差。</p>
+
+<p>通过向量表示为：</p>
+
+<p>相关系数其实就是之前说的余弦距离，表示事物之间的相关性。对比之前关于网站书评的例子，容易知道：</p>
+
+<p>，则正相关</p>
+
+<p>，则负相关</p>
+
+<p>，则不相关 .要说明的一点是，  代表不相关，并不一定独立。这和线代的独立含义还是有所不同。</p>
+
+<p>#4、通过散点图来看待相关系数</p>
+
+<p>之前是通过向量来解释了相关系数，不过随机变量 X,Y， 一般数值都很多，组成的向量都超过三维，这样就没有直观的几何意义了，所以我们一般用散点图来表示。比如说，我这里有一组身高、体重的数据：</p>
+
+<p>相关系数为：    和我们直觉相符，体重和身高确实是有强烈的正相关关系。把（身高，体重）作为一个点，画成散点图：</p>
+
+<p>从散点图也可以看出，这些点并非随机，其实是有规律的，可以认为它们贴合在下面红色直线的周围：</p>
+
+<p>而下面这样的点才是散乱无章的，所以相关系数接近于零：</p>
+
+<p>最后用维基百科给出的散点图来结束，该散点图给出了不同形态的点分布与相关系数之间的关系：</p>
+
+<p>参考文献：</p>
+
+<p>如何理解协方差、相关系数？         <a href="https://mp.weixin.qq.com/s/oejfQS-705PI5DhmC4AAug">https://mp.weixin.qq.com/s/oejfQS-705PI5DhmC4AAug</a></p>
+
+</div>
+
+
+    </main>
+
+    
+  </body>
+</html>
